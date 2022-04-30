@@ -1,7 +1,9 @@
+import { Container } from "@mui/material";
 import Box from "@mui/material/Box";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { child, get, getDatabase, ref } from "firebase/database";
 import { useEffect, useState } from "react";
+import NavBar from "../Navbar";
 
 type userProps = {
 
@@ -15,15 +17,17 @@ type userProps = {
 export function UsersList() {
 
   const columns: GridColDef[] = [
-    { field: 'name', headerName: 'First name', width: 130 },
-    { field: 'lastName', headerName: 'Last name', width: 130 },
+    { field: 'name', headerName: 'Nome', width: 130 },
+    { field: 'lastName', headerName: 'Sobrenome', width: 130 },
     {
       field: 'email',
       headerName: 'Email',
+      width: 150
     },
     {
       field: 'hasAccepted',
-      headerName: 'Has Accepted',
+      headerName: 'Aceitou o Termo?',
+      width: 130
     },
   ];
 
@@ -51,30 +55,33 @@ export function UsersList() {
 
   return (
     <div id="page-auth">
-      {/* <RegisterPerson /> */}
-      <Box
-        component="div"
-        sx={{
-          marginTop: 0,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          border: 2
-        }}
-      >
+      <NavBar />
+      <Container maxWidth="xl">
 
-        <div style={{ height: 500, width: '100%' }}>
+        <h2>Usuarios Cadastrados</h2>
+        <Box
+          component="div"
+          sx={{
+            marginTop: 0,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}
+        >
 
-          <DataGrid
-            rows={users}
-            columns={columns}
-            pageSize={5}
-            rowsPerPageOptions={[5]}
-            checkboxSelection
-          />
+          <div style={{ height: 500, width: '100%' }}>
 
-        </div>
-      </Box>
+            <DataGrid
+              rows={users}
+              columns={columns}
+              pageSize={5}
+              rowsPerPageOptions={[5]}
+            //checkboxSelection
+            />
+
+          </div>
+        </Box>
+      </Container>
 
     </div>
   );

@@ -26,12 +26,16 @@ const database = getDatabase(app);
 const db = getFirestore(app)
 const auth = getAuth(app);
 
-onAuthStateChanged(auth, user => {
+let loggedUser: boolean = false;
+ onAuthStateChanged(auth, user => {
   if (user !== null) {
-    console.log('logged in')
+    console.log('logged in');
+
+     loggedUser = true;
   } else {
-    console.log('No user')
+    console.log('No user');
+    let loggedUser = false;
   }
 })
 
-export { database, auth }
+export { database, auth, loggedUser }

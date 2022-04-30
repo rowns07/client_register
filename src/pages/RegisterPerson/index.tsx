@@ -9,7 +9,11 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import TextField from "@mui/material/TextField";
 import { getDatabase, push, ref, set } from "firebase/database";
 import { useState } from "react";
+// import { Link } from "react-router-dom";
+import Link from '@mui/material/Link';
 import { v4 as uuidv4 } from 'uuid';
+import NavBar from "../Navbar";
+import { useNavigate } from "react-router-dom";
 
 type userProps = {
 
@@ -25,6 +29,7 @@ function RegisterPerson() {
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [hasAccepted, setHasAccepted] = useState(false);
+  const navigate = useNavigate();
 
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -56,6 +61,7 @@ function RegisterPerson() {
   return (
     <>
       <ThemeProvider theme={theme}>
+        <NavBar />
         <Container component="main" maxWidth="xs">
           <CssBaseline />
 
@@ -135,6 +141,14 @@ function RegisterPerson() {
                   >
                     Realizar Cadastro
                   </Button>
+                </Grid>
+              </Grid>
+
+              <Grid container>
+                <Grid item>
+                  <Link href="#" variant="body2" onClick={() => navigate('/')}>
+                    {"Não tem uma conta? Cadastre-se"}
+                  </Link>
                 </Grid>
               </Grid>
 

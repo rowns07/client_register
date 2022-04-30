@@ -14,7 +14,6 @@ function App() {
           <Route path="/" element={<Login />} />
           <Route path="/register" element={<RegisterPerson />} />
           <Route path="/users" element={<UsersList />} />
-          {/* <Route path="/login" element={<Login />} /> */}
         </Routes>
       </AuthContextProvider>
     </BrowserRouter>

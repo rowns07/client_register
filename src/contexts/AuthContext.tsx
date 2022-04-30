@@ -6,8 +6,10 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
   signOut, 
-  getAuth
+  getAuth,
+  onAuthStateChanged,
 } from 'firebase/auth'
+import { auth } from "../services/firebase";
 
 type User = {
   id: string,
@@ -30,11 +32,32 @@ export const AuthContext = createContext({} as AuthContextType);
 export function AuthContextProvider(props: AuthContextProviderProps) {
   const [user, setUser] = useState<User>();
   const navigate = useNavigate();
-  const sair = signOut;
+  //const sair = signOut(getAuth());
 
-  useEffect(() => {
-    const unsubscribe = getAuth().onAuthStateChanged(user => {
-      if (user) {
+  // useEffect(() => {
+  //   const unsubscribe = getAuth().onAuthStateChanged(user => {
+  //     if (user) {
+  //       const { displayName, photoURL, uid } = user;
+  //       if (!displayName || !photoURL) {
+  //         throw new Error('Missing information from Google Account.')
+  //       }
+  //       setUser({
+  //         id: uid,
+  //         name: displayName,
+  //         avatar: photoURL
+  //       })
+  //     }
+  //   })
+
+  //   return () => {
+  //     unsubscribe()
+  //   }
+  // }, []);
+
+  const usuarioLogado= () =>{
+    const unsubscribe =  onAuthStateChanged(auth, user => {
+      if (user !== null) {
+
         const { displayName, photoURL, uid } = user;
         if (!displayName || !photoURL) {
           throw new Error('Missing information from Google Account.')
@@ -44,13 +67,21 @@ export function AuthContextProvider(props: AuthContextProviderProps) {
           name: displayName,
           avatar: photoURL
         })
+
+        console.log('logged in AUTH')
+      } else {
+        console.log('No user in AUTH')
       }
     })
 
     return () => {
       unsubscribe()
     }
-  }, [])
+  }
+
+  useEffect(() => {
+    usuarioLogado()
+  }, []);
 
   async function signInWithGoogle() {
     const provider = new GoogleAuthProvider();
@@ -67,16 +98,19 @@ export function AuthContextProvider(props: AuthContextProviderProps) {
         name: displayName,
         avatar: photoURL
       })
+      console.log('User',user);
+      navigate('/users');
     }
   }
 
   async function logOut() {
-    await sair
+    await signOut(getAuth())
     navigate('/');
     console.log('SAIU', user);
   }
 
   return (
+
     <AuthContext.Provider value={{ user, signInWithGoogle, logOut }}>
       {props.children}
     </AuthContext.Provider>
